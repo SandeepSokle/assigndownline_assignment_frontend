@@ -115,11 +115,14 @@ export default function Signup() {
           <BasicSelect setFormData={setFormData} formData={formData} />
         </Box>
 
-        <Button fullWidth variant="contained"
-          onClick={() => {
-            let status = signupUser(formData);
-            if (status) navigate("/");
-          }}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={async () => {
+            let status = await signupUser(formData);
+            if (status.success) navigate("/", { state: status.webToken });
+          }}
+        >
           Signup
         </Button>
         <Button
@@ -139,18 +142,22 @@ export default function Signup() {
   );
 }
 
-
 const signupUser = async (userDetails) => {
   try {
     const data = await axios.post(`${API_URL}user/signup`, {
       ...userDetails,
     });
 
-    console.log(data.data.response.token);
     localStorage.setItem("assignTaskToken", data.data.response.token);
-    return true;
+
+    return {
+      success: true,
+      webToken: data.data.response.token,
+    };
   } catch (err) {
     console.log(err);
-    return false;
+    return {
+      success: false,
+    };
   }
 };

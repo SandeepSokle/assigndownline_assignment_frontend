@@ -26,12 +26,13 @@ export default function Login() {
     >
       <Box
         sx={{
-          height: "70vh",
-          width: "60vw",
+          // height: "70vh",
+          width: "60%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "auto",
         }}
       >
         <Box
@@ -68,13 +69,12 @@ export default function Login() {
         </Box>
 
         <Button
-          fullWidth
+          // fullWidth
           variant="contained"
-          onClick={() => {
-            let status = loginUser(formData);
-            if (status) {
-              navigate("/");
-              // window.location.reload();
+          onClick={async () => {
+            let status = await loginUser(formData);
+            if (status.success) {
+              navigate("/", { state: status.webToken });
             }
           }}
         >
@@ -101,11 +101,15 @@ const loginUser = async (loginDetails) => {
     const data = await axios.post(`${API_URL}user/login`, {
       ...loginDetails,
     });
-
     localStorage.setItem("assignTaskToken", data.data.response.token);
-    return true;
+    return {
+      success: true,
+      webToken: data.data.response.token,
+    };
   } catch (err) {
     console.log(err);
-    return false;
+    return {
+      success: false,
+    };
   }
 };
