@@ -55,6 +55,13 @@ const Header = () => {
       </div>
       {isPopupVisible && (
         <div style={popupStyle}>
+          <button
+            onClick={() => {
+              navigate("/update");
+            }}
+          >
+            update Profile
+          </button>
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}

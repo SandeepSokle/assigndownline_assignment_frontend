@@ -32,7 +32,7 @@ export default function BasicSelect(props) {
         fullWidth
         labelId="demo-simple-select-label"
         id="demo-simple-select"
-        value={formData.upline}
+        value={formData.upline || ""}
         label="Select Your Manager"
         onChange={handleChange}
       >
@@ -44,13 +44,12 @@ export default function BasicSelect(props) {
   );
 }
 
-
 const getUserData = async (setUserList) => {
-    try {
-      const data = await axios.get(`${API_URL}user/registered_users`);
-      setUserList(data.data.response.users || []);
-      return data.data.response.users;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  try {
+    const data = await axios.get(`${API_URL}user/registered_users`);
+    setUserList(data.data.response.users || []);
+    return data.data.response.users;
+  } catch (err) {
+    console.log(err);
+  }
+};
